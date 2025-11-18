@@ -15,4 +15,7 @@ Explique como instalar ou rodar o projeto.
 ## Como rodar
 1. Clone o repositório
 2. Instale as dependências
+
 3. Execute: `python main.py`
+
+4. bcrypt necessario 
