@@ -28,11 +28,30 @@ t2.pack(side="left", padx=15)
 senha = ctk.CTkEntry(frame2, placeholder_text="Digite sua senha", show="*")
 senha.pack(side="left")
 
+
+
+def abrir_tela_principal():
+    nova = ctk.CTk()
+    nova.title("Tela Principal")
+    nova.geometry("800x400")
+
+    label = ctk.CTkLabel(nova, text="Bem-vindo!")
+    label.pack(pady=20)
+
+    nova.mainloop()
+
+
+
 def cadastrar():
     criar_usuario(user.get(), senha.get(), "usuario")
     print("Usuário cadastrado!")
+
+    janela.destroy()
+    abrir_tela_principal()
+
 
 b = ctk.CTkButton(janela, text="Cadastrar", command=cadastrar)
 b.pack(pady=20)
 
 janela.mainloop()
+
