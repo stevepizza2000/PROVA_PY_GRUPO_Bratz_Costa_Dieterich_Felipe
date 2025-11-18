@@ -1,27 +1,35 @@
 import bcrypt
-from db.py import get_connection
+from db import get_connection
 
-def criar_usuario(u, senha, nome, tipo="usuario"):
+def criar_usuario(login, senha, tipo="usuario"):
     conn = get_connection()
     cursor = conn.cursor()
 
-    senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt())
+    # Gera o hash da senha e DECODIFICA ele, não a senha original
+    senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
 
     cursor.execute("""
-        INSERT INTO usuarios (nome, username, senha_hash, tipo)
-        VALUES (%s, %s, %s, %s)
-    """, (nome, username, senha_hash, tipo))
+        INSERT INTO tb_users (login, senha, tipo)
+        VALUES (%s, %s, %s)
+    """, (login, senha_hash, tipo))
 
     conn.commit()
     conn.close()
 
-def autenticar(username, senha):
+
+def autenticar(login, senha):
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM usuarios WHERE username = %s", (username,))
+    cursor.execute("SELECT * FROM tb_users WHERE login = %s", (login,))
     user = cursor.fetchone()
+    conn.close()
 
-    if user and bcrypt.checkpw(senha.encode(), user["senha_hash"].encode()):
+    if not user:
+        return None
+
+    # Comparar a senha digitada com o hash salvo
+    if bcrypt.checkpw(senha.encode(), user["senha"].encode()):
         return user
+
     return None
