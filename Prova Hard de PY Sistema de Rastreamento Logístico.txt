@@ -1,0 +1,155 @@
+# PROVA Final de Python — Sistema de Rastreamento Logístico Multiplataforma (versão com login e auditoria)
+
+## Contexto
+
+Sua equipe foi contratada para desenvolver um **sistema de rastreamento de encomendas** com múltiplas interfaces (desktop, web e console). O sistema deve ser seguro, auditável e empacotável para entrega — pronto para execução em outra máquina sem necessidade de instalar manualmente cada dependência.
+
+---
+
+## Objetivo
+
+Construir um sistema Python composto por **três interfaces integradas** que compartilham o mesmo banco de dados MySQL, com **autenticação de usuários** e **registro auditável de todas as alterações de status/localização** dos pedidos.
+
+### Interfaces exigidas
+
+1. **Aplicativo Desktop (GUI)**
+
+   * Usar `tkinter`, `PyQt` ou similar.
+   * Funcionalidades:
+
+     * Login de usuário (autenticação).
+     * Cadastro de envio com campos mínimos: código de rastreio (gerado ou informado), nome do produto, remetente, destinatário, endereços, data de postagem, status inicial.
+     * Tela para consulta de envios e detalhamento.
+     * Botão para exportar/gerar um comprovante (opcional PDF) — **se implementado, documentar**.
+   * Deve haver controle de permissões (ex.: usuários comuns podem cadastrar/consultar; operadores/administradores podem atualizar status).
+
+2. **Interface Web (Consulta pública/cliente)**
+
+   * Páginas HTML/CSS e, opcionalmente, PHP ou outras tecnologias front-end que desejarem integrar.
+   * Funcionalidades:
+
+     * Consulta pública pelo código de rastreio (não requer login).
+     * Exibe informações do envio, status atual e data/hora da última atualização.
+	 * Para rodar a interface WEB, criem um script, em Py mesmo que copie o site para a pasta c:\xampp\htdocs\sys_rast_log e faça abrir a página index.
+
+
+3. **Console (Terminal Administrativo / Operador)**
+
+   * Ferramenta de linha de comando para operadores autenticados (pode ser CLI simples com prompt).
+   * Funcionalidades:
+
+     * Login via terminal.
+     * Atualizar status/localização do produto (cada alteração grava um registro de auditoria).
+     * Listar envios por status (pendentes, em trânsito, entregues).
+     * Histórico de alterações por código de rastreio.
+
+4. **Instalador final**
+
+   * Criar um programa em Python que pergunte o que o usuario deseja instalar (GUI/CLI/WEB)
+
+     * De acordo com o que o usuário decidir é o que deve ser executado no computador do mesmo.
+---
+
+## Requisitos obrigatórios técnicos
+
+* **Linguagem:** Python 3.x.
+* **Banco de dados:** MySQL (mesma instância usada por todas as interfaces).
+* **Autenticação:** Implementar login com armazenamento seguro de credenciais (hash + salt; por exemplo `bcrypt`).
+* **Auditoria (Log de alterações):** obrigatória.
+
+  * Criar tabela de log/audit que registre, no mínimo: `id`, `codigo_rastreio`, `usuario_id`, `acao` (ex.: atualização_status), `status_antigo`, `status_novo`, `localizacao`, `timestamp`, `observacao` (opcional), `ip_origem` (se aplicável).
+  * Toda atualização de status via console ou GUI deve inserir um registro nessa tabela.
+* **Modularidade:** separar código por módulos (DB, autenticação, GUI, web, CLI, utilitários).
+* **Validações:** validação de campos, tratamento de erros e mensagens claras ao usuário.
+* **Scripts:** entregar script SQL `schema.sql` que cria todas as tabelas e índices necessários (incluindo usuários e tabelas de auditoria).
+* **Segurança mínima:** evitar SQL injection (usar queries parametrizadas), senhas não em texto, sanitização de entradas.
+* **Documentação mínima exigida:** README com instruções detalhadas (instalação, execução, build dos executáveis), arquivo `credits.txt` para fontes de imagens/ícones usadas.
+
+---
+
+## Entregáveis obrigatórios (sem exceções)
+
+Cada grupo deve submeter **um único arquivo ZIP** com a seguinte estrutura **exata** (exemplo):
+
+```
+PROVA_PY_GRUPO_NOMEAL1_NOMEAL2_NOMEAL3
+├─ README.md
+├─ schema.sql
+├─ .env.example
+├─ credits.txt
+├─ /src
+│  ├─ gui_app.py (ou package)
+│  ├─ web_app.py (ou package)
+│  ├─ cli_tool.py
+│  ├─ db/ (com o arquivo sql de instalação do banco)
+│  ├─ auth/
+│  └─ requirements.txt
+├─ /build
+│  ├─ gui_executable.exe
+│  ├─ web_executable.exe
+│  └─ cli_executable.exe
+├─ /docs
+│  ├─ instrucoes_execucao.pdf (com prints)
+│  └─ divisao_de_tarefas.txt
+└─ /tests (relatórios dos testes, opcional mas recomendado)
+```
+
+**Detalhes importantes:**
+
+* **Executáveis:** devem incluir executáveis compilados para o desktop GUI e para a CLI (ex.: via `pyinstaller`). As Instruções claras no README. Os executáveis devem rodar em Windows.
+* **Deve constar também uma documentação para o usuário final, explicando como utilizar o sistema.
+* **Arquivo .env.example:** variáveis de configuração (host, porta, db name, user, etc.) — não incluir senhas reais.
+* **Zip único:** tudo deve estar dentro de um ZIP — pastas, executáveis e fonte. Submissões incompletas (faltando executáveis ou schema.sql) terão penalidade.
+* **Divisão de tarefas:** dentro de `docs/divisao_de_tarefas.txt` listar claramente quem fez o quê.
+* **Os arquivos de textos podem ser em TXT ou PDF, não em formatod DOC, DOCX ou ODT.
+* **É obrigatório citar as fontes das imagens:
+   * No arquivo `creditos.txt`;
+   * E novamente na **documentação técnica** do sistema (mas **não no manual do usuário**).
+
+---
+
+## Critérios de avaliação (total 10,0 pontos)
+
+* **Funcionalidade completa e integração entre interfaces:** 3,0 pts
+
+  * (verifica se GUI, web e CLI usam o mesmo banco e se alterações via CLI/GUIs refletem em todas)
+* **Implementação de login e segurança de credenciais:** 1,5 pts
+* **Auditoria / Log de alterações corretamente implementada:** 1,5 pts
+* **Entrega dos artefatos (ZIP + executáveis + schema.sql + docs):** 1,0 pts
+
+  * (falta de executáveis: -0,7 pts; falta do schema.sql: -1,0 pt)
+* **Organização do código (modularidade, clareza, comentários):** 1,0 pts
+* **Usabilidade da GUI e web + validações:** 0,7 pts
+* **Documentação e divisão de tarefas:** 0,3 pts
+
+
+---
+
+## Sugestões técnicas e boas práticas (para orientar os grupos)
+
+* Usar `bcrypt` para hashing de senhas; `mysql-connector-python` ou `pymysql` com prepared statements para evitar injeção.
+* Criar uma função/facade para todas operações de DB (CRUD + insert_log).
+* Para compilar executáveis: `pyinstaller --onefile` ou `pyinstaller --add-data` (documentar passos e sistema alvo).
+* For web: separar templates e rotas; usar `jinja2` (Flask) e criar um endpoint `/api/status/<rastreio>` que retorne JSON.
+* Registrar timestamps no padrão ISO (`YYYY-MM-DD HH:MM:SS`) e armazenar timezone (se possível).
+* Incluir testes básicos (unitários) para as funções de DB (opcional, mas valorizado).
+
+---
+
+## Checklist final para submissão (copiar e colar no ZIP como `CHECKLIST.txt`)
+
+* [ ] `README.md` com instruções de execução e build.
+* [ ] `schema.sql` (criação de tabelas + índices).
+* [ ] `src/` com todo código-fonte.
+* [ ] `build/` com executáveis (GUI e CLI obrigatórios; web empacotado ou instruções).
+* [ ] `.env.example` ou `config.example.json`.
+* [ ] `docs/divisao_de_tarefas.txt` com nomes e responsabilidades.
+* [ ] `credits.txt` para imagens/ícones/bibliotecas externas.
+* [ ] ZIP final nomeado como `<grupo>-rastreamento.zip`.
+
+---
+## Entrega
+* Todos os arquivos, pastas do projeto deverão estar em um único arquivo compactado (RAR, ZIP, 7Z, ARJ, etc) com o nome padrão de arquivo: PROVA_PY_GRUPO_NOMEAL1_NOMEAL2_NOMEAL3.*
+* Este arquivo deve ser colocado em uma pasta no FTP e informar o professor quem entregou o a prova no nome do grupo.
+
+
