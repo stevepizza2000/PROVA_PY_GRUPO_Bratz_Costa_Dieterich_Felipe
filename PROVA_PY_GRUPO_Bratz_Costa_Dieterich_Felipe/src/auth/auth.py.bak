@@ -1,0 +1,27 @@
+import bcrypt
+from db.py import get_connection
+
+def criar_usuario(username, senha, nome, tipo="usuario"):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt())
+
+    cursor.execute("""
+        INSERT INTO usuarios (nome, username, senha_hash, tipo)
+        VALUES (%s, %s, %s, %s)
+    """, (nome, username, senha_hash, tipo))
+
+    conn.commit()
+    conn.close()
+
+def autenticar(username, senha):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM usuarios WHERE username = %s", (username,))
+    user = cursor.fetchone()
+
+    if user and bcrypt.checkpw(senha.encode(), user["senha_hash"].encode()):
+        return user
+    return None
