@@ -1,0 +1,39 @@
+/* como integrar o banco */
+$host = "localhost"; 
+$user = "root";
+$pass = "";
+$bd   = "db_costa_imsb";
+
+$conec = new mysqli ($host, $user, $pass, $bd);
+if ($conec -> connect_error) {
+	die("Erro de conexão: " . $conec -> connect_error);
+}
+
+$mensagem = "";
+
+if ($_SERVER ["REQUEST_METHOD"] == "POST") {
+	$nomecompleto = $_POST['Nome_completo'];
+	$email = $_POST['email'];
+	$telefone = $_POST['tel'];
+	$cpf = $_POST['texto'];
+	$tipo = $_POST['pets'];
+	$endereco = $_POST['endereco'];
+
+    if ($nomecompleto && $email && $telefone && $cpf && $tipo && $endereco) {
+        /* Prepared Statement evita SQL Injection */
+        $stmt = $conec->prepare(
+            'INSERT INTO tb_clientes (nome, email, telefone, cpf_cnpj, tipo_cliente, endereco) VALUES (?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->bind_param('ssiiss', $nomecompleto, $email, $telefone, $cpf, $tipo, $endereco);
+
+        if ($stmt->execute()) {
+            $mensagem = 'O envio foi realizado com sucesso!';
+        } else {
+            $mensagem = 'Erro ao fazer seu envio: ' . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        $mensagem = 'Preencha todos os campos corretamente.';
+    }
+}
+?>
