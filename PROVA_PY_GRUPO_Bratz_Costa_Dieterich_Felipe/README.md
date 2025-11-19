@@ -1,15 +1,14 @@
-# Nome do Projeto
+# Sistema de Rastreamento Logístico Multiplataforma
 
-Descrição curta explicando o que o projeto faz.
+sistema de rastreamento de encomendas com múltiplas interfaces (desktop, web e console).
 
 ## 🚀 Tecnologias usadas
-- Linguagem 1
-- Linguagem 2
-- Banco de dados
-- Etc.
+- Python
+- PHP
+- MySql
 
 ## 📦 Como instalar
-Explique como instalar ou rodar o projeto.
+Baixe o arquivo .EXE e execute.
 
 
 ## Como rodar
@@ -19,3 +18,4 @@ Explique como instalar ou rodar o projeto.
 3. Execute: `python main.py`
 
 4. bcrypt necessario 
+
