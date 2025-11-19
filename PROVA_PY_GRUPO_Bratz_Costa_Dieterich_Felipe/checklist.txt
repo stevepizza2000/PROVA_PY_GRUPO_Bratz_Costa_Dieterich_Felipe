@@ -1,0 +1,8 @@
+* [x] `README.md` com instruções de execução e build.
+* [x] `schema.sql` (criação de tabelas + índices).
+* [ ] `src/` com todo código-fonte.
+* [x] `build/` com executáveis (GUI e CLI obrigatórios; web empacotado ou instruções).
+* [ ] `.env.example` ou `config.example.json`.
+* [ ] `docs/divisao_de_tarefas.txt` com nomes e responsabilidades.
+* [ ] `credits.txt` para imagens/ícones/bibliotecas externas.
+* [ ] ZIP final nomeado como `<grupo>-rastreamento.zip`.
