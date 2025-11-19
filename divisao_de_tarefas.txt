@@ -1,7 +1,7 @@
-Arthur Bratz: Responsável pelas GUIs.
+Arthur Bratz: Desenvolvimento das GUIs, 
 
-Costa: Nada.
+Artur Costa: Desenvolvimento do programa pelo console, 
 
-BIbi: Tudo.
+Felipe: Desenvolvimento do Banco de Dados, desenvolvimento de GUIs
 
-Dieterich: Nada.
+Gabriel Dieterich: Desenvolvimento da Página Web,
